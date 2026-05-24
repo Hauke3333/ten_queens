@@ -6,63 +6,12 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-void	ft_excl_rows(int col, int *pos, int *rows)
-{
-	int	i;
-
-	printf("start ft_excl_rows \n");
-	i = 0;
-	while (i < 10)
-	{
-		rows[i] = 1;
-		i++;
-	}
-	i = 0;
-	while (i < col)
-	{
-		rows[pos[i]] = 0;
-		if (pos[i] + col - i < 10)
-		{
-			printf("i: %d, col: %d, pos: %d, p+c-i %d\n", i, col, pos [i], pos[i] + col - i);
-			rows[pos[i] + col - i] = 0;
-		}
-		if (pos[i] - col + i >= 0)
-		{
-			printf("i: %d, col: %d, pos: %d, p-c+i %d\n", i, col, pos [i], pos[i] - col + i);
-			rows[pos[i] - col + i] = 0;
-		}
-		i++;
-	}
-}
-
-int	pos_is_possible(int *pos, int col, int j)
-{
-	int	j;
-
-	j = 0;
-	while (j < 10)
-	{
-		if (p == pos[j] || p == pos[j] + col - j)
-		{
-			poss = 0;
-			return (0);
-		}
-		if (p == pos[j] - col + j)
-		{
-			poss = 0;
-			return (0);
-		}
-		i++;
-	}
-	return (1);
-}
-
 void	ft_put_pos(int *pos)
 {
 	int	j;
 
 	j = 0;
-	while (i < 10)
+	while (j < 10)
 	{
 		ft_putchar(pos[j] + '0');
 		j++;
@@ -70,32 +19,49 @@ void	ft_put_pos(int *pos)
 	ft_putchar('\n');
 }
 
+int	pos_is_possible(int *pos, int col, int i_check)
+{
+	int	i;
+
+	i = 0;
+	while (i < 10)
+	{
+		if (i_check == pos[i])
+			return (0);
+		if (i_check == pos[i] + col - i)
+			return (0);
+		if (i_check == pos[i] - col + i)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	ft_queen_pos(int *pos, int *count)
 {
 	int	col;
-	int	rows[10];
 	int	i;
 
 	col = 0;
 	while (pos[col] != 99)
 		col++;
-	printf("ft_queen_pos col: %d\n", col);
-	ft_excl_rows(col, pos, rows);
 	i = 0;
 	while (i < 10)
 	{
-		if (rows[i] == 1)
+		if (pos_is_possible(pos, col, i))
 		{
 			pos[col] = i;
-			ft_queen_pos(pos, count);
 			if (col == 9)
 			{
 				ft_put_pos(pos);
 				*count = *count + 1;
 			}
+			else
+				ft_queen_pos(pos, count);
 		}
 		i++;
 	}
+	pos[col] = 99;
 }
 
 int	ft_ten_queens_puzzle(void)
@@ -106,8 +72,8 @@ int	ft_ten_queens_puzzle(void)
 	int	j;
 
 	j = 0;
+	c = 0;
 	count = &c;
-	*count = 0;
 	while (j < 10)
 	{
 		pos[j] = 99;
@@ -119,6 +85,6 @@ int	ft_ten_queens_puzzle(void)
 
 int	main(void)
 {
-	ft_ten_queens_puzzle();
+	printf("Possible positions: %d\n", ft_ten_queens_puzzle());
 	return (0);
 }
