@@ -35,15 +35,37 @@ void	ft_excl_rows(int col, int *pos, int *rows)
 	}
 }
 
+int	pos_is_possible(int *pos, int col, int j)
+{
+	int	j;
+
+	j = 0;
+	while (j < 10)
+	{
+		if (p == pos[j] || p == pos[j] + col - j)
+		{
+			poss = 0;
+			return (0);
+		}
+		if (p == pos[j] - col + j)
+		{
+			poss = 0;
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 void	ft_put_pos(int *pos)
 {
-	int	i;
+	int	j;
 
-	i = 0;
+	j = 0;
 	while (i < 10)
 	{
-		ft_putchar(pos[i] + '0');
-		i++;
+		ft_putchar(pos[j] + '0');
+		j++;
 	}
 	ft_putchar('\n');
 }
@@ -81,15 +103,15 @@ int	ft_ten_queens_puzzle(void)
 	int	pos[10];
 	int	c;
 	int	*count;
-	int	i;
+	int	j;
 
-	i = 0;
+	j = 0;
 	count = &c;
 	*count = 0;
-	while (i < 10)
+	while (j < 10)
 	{
-		pos[i] = 99;
-		i++;
+		pos[j] = 99;
+		j++;
 	}
 	ft_queen_pos(pos, count);
 	return(*count);
